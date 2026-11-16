@@ -73,8 +73,31 @@ export default function DashboardPage() {
   }, [router]);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    // The fetch lives inside the effect so state is only touched after an await.
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const [org, planList] = await Promise.all([fetchCurrentOrg(), fetchPlans()]);
+        if (cancelled) return;
+        setData(org);
+        setPlans(planList);
+        setError(null);
+      } catch (caught) {
+        if (cancelled) return;
+        if (caught instanceof ApiError && caught.status === 401) {
+          clearTokens();
+          router.replace("/");
+          return;
+        }
+        setError(caught instanceof Error ? caught.message : "Could not load the workspace");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   const withBusy = async (key: string, action: () => Promise<void>) => {
     setBusy(key);

@@ -1,23 +1,21 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { clearTokens, getToken } from "@/lib/api";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const [ready, setReady] = useState(false);
+  // Read the token during render instead of mirroring it into state, which would
+  // mean calling setState from inside an effect.
+  const authed = typeof window !== "undefined" && Boolean(getToken());
 
   useEffect(() => {
-    if (!getToken()) {
-      router.replace("/");
-      return;
-    }
-    setReady(true);
+    if (!getToken()) router.replace("/");
   }, [router]);
 
-  if (!ready) {
+  if (!authed) {
     return (
       <div className="flex min-h-dvh items-center justify-center">
         <span className="size-5 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
