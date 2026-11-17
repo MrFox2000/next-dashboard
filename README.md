@@ -16,6 +16,23 @@ Next.js 16 · TypeScript · Tailwind 4
 
 ---
 
+## Live
+
+| | |
+|---|---|
+| **Dashboard** | https://next-dashboard-phi-azure.vercel.app |
+| **API** | https://django-saas-api.onrender.com |
+| **API docs** | https://django-saas-api.onrender.com/api/docs/ |
+
+The sign-in form is pre-filled with `demo@example.com` / `demo-pass-1234`, the owner
+of the seeded **Acme Labs** organisation. Everything on the page comes from the live
+API and a real Postgres database â€” nothing is mocked.
+
+> The free Render API instance sleeps after 15 minutes idle, so the first request
+> after a quiet spell can take ~50 seconds while it wakes up.
+
+---
+
 ## What it is
 
 This is the other half of [`django-saas-starter`](https://github.com/MrFox2000/django-saas-starter):
